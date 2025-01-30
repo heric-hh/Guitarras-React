@@ -1,10 +1,17 @@
+import { useMemo } from "react";
+
 export default function Header({
   carrito,
   agregarCarrito,
   quitarUno,
   quitarGuitarra,
   vaciarCarrito,
+  guitar,
 }) {
+  const total = useMemo(
+    () => carrito.reduce((t, g) => t + g.cantidad * g.precio, 0),
+    [carrito],
+  );
   return (
     <header className="py-5 header">
       <div className="container-xl">
@@ -52,7 +59,7 @@ export default function Header({
                               />
                             </td>
                             <td>{guitar.nombre}</td>
-                            <td className="fw-bold">{guitar.precio}</td>
+                            <td className="fw-bold">${guitar.precio}</td>
                             <td className="flex align-items-start gap-4">
                               <button
                                 type="button"
@@ -85,7 +92,7 @@ export default function Header({
                     </table>
 
                     <p className="text-end">
-                      Total pagar: <span className="fw-bold">$899</span>
+                      Total pagar: <span className="fw-bold">${total}</span>
                     </p>
                     <button
                       className="btn btn-dark w-100 mt-3 p-2"
@@ -102,17 +109,13 @@ export default function Header({
 
         <div className="row mt-5">
           <div className="col-md-6 text-center text-md-start pt-5">
-            <h1 className="display-2 fw-bold">Modelo VAI</h1>
-            <p className="mt-5 fs-5 text-white">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Temporibus, possimus quibusdam dolor nemo velit quo, fuga omnis,
-              iure molestias optio tempore sint at ipsa dolorum odio
-              exercitationem eos inventore odit.
-            </p>
-            <p className="text-primary fs-1 fw-black">$399</p>
+            <h1 className="display-2 fw-bold">Modelo {guitar.nombre}</h1>
+            <p className="mt-5 fs-5 text-white">{guitar.descripcion}</p>
+            <p className="text-primary fs-1 fw-black">${guitar.precio}</p>
             <button
               type="button"
               className="btn fs-4 bg-primary text-white py-2 px-5"
+              onClick={() => agregarCarrito(guitar)}
             >
               Agregar al Carrito
             </button>

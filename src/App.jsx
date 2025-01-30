@@ -2,10 +2,21 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Guitar from "./components/Guitar";
 import { db } from "./data/guitarras.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export default function App() {
-  const [guitars, setGuitars] = useState(db);
-  const [carrito, setCarrito] = useState([]);
+  const [guitars] = useState(db);
+  const [carrito, setCarrito] = useState(cargarStorage());
+
+  useEffect(guardarStorage, [carrito]);
+
+  function cargarStorage() {
+    const storageData = localStorage.getItem("carrito");
+    return storageData ? JSON.parse(storageData) : [];
+  }
+
+  function guardarStorage() {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+  }
 
   function agregarCarrito(guitar) {
     console.log(`agregando al carrito ${guitar.id}, ${guitar.nombre}`);
@@ -44,6 +55,7 @@ export default function App() {
         quitarUno={quitarUno}
         quitarGuitarra={quitarGuitarra}
         vaciarCarrito={vaciarCarrito}
+        guitar={guitars[3]}
       />
       <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
